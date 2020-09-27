@@ -1,43 +1,47 @@
 #include "std_lib_facilities.h"
 
+bool is_valid(double& temp_conv, const std::string& unit, double temp)
+{
+  constexpr double cm_to_m = 100;
+  constexpr double in_to_m = 0.0254;
+  constexpr double ft_to_m = 0.0254 * 12;
+  if (unit == "cm")
+  {
+    temp_conv = temp / cm_to_m;
+    return true;
+  }
+  else if (unit == "m")
+  {
+    temp_conv = temp;
+    return true;
+  }
+  else if (unit == "in")
+  {
+    temp_conv = temp * in_to_m;
+    return true;
+  }
+  else if (unit == "ft")
+  {
+    temp_conv = temp * ft_to_m;
+    return true;
+  }
+  cout << "Invalid unit!\n";
+  cout << "Please enter a valid unit(cm, m, in, ft).\n";
+  return false;
+}
+
 int main()
 {
   vector<double> data;
   double temp = 0, temp_conv, largest = 0, smallest = 0, sum = 0;
-  constexpr double cm_to_m = 100;
-  constexpr double in_to_m = 0.0254;
-  constexpr double ft_to_m = 0.0254 * 12;
   string unit;
-  bool is_valid = true;
   bool is_first = true;
   int ctr = 0;
   cout << "Please give me numbers!\n";
   cout << "To terminate the program enter |\n";
   while (cin >> temp >> unit)
   {
-    if (unit == "cm")
-    {
-      temp_conv = temp / cm_to_m;
-    }
-    else if (unit == "m")
-    {
-      temp_conv = temp;
-    }
-    else if (unit == "in")
-    {
-      temp_conv = temp * in_to_m;
-   }
-    else if (unit == "ft")
-    {
-      temp_conv = temp * ft_to_m;
-    }
-    else
-    {
-      is_valid = false;
-      cout << "Invalid unit!\n";
-      cout << "Please enter a valid unit(cm, m, in, ft).\n";
-    }
-    if (is_valid)
+    if (is_valid(temp_conv, unit, temp) == true)
     {
       cout << "The entered value is: ";
       cout << temp << ' ' << unit << endl;
@@ -56,7 +60,6 @@ int main()
       ++ctr;
       is_first = false;
     }
-    is_valid = true;
     /*
     if(a == b)
     {
