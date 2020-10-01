@@ -27,19 +27,7 @@ double convert(double &temp_conv,double temp,const string unit)
 
 bool is_valid(const std::string& unit)
 {
-  if (unit == "cm")
-  {
-    return true;
-  }
-  else if (unit == "m")
-  {
-    return true;
-  }
-  else if (unit == "in")
-  {
-    return true;
-  }
-  else if (unit == "ft")
+  if (unit == "cm" || unit == "m" || unit == "in" || unit == "ft")
   {
     return true;
   }
