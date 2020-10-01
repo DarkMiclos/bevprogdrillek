@@ -1,32 +1,48 @@
 #include "std_lib_facilities.h"
 
-bool is_valid(double& temp_conv, const std::string& unit, double temp)
+double convert(double &temp_conv,double temp,const string unit)
 {
   constexpr double cm_to_m = 100;
   constexpr double in_to_m = 0.0254;
   constexpr double ft_to_m = 0.0254 * 12;
+  if(unit == "cm")
+  {
+    temp_conv = temp /cm_to_m;
+  }
+  else if(unit == "m")
+  {
+    temp_conv = temp;
+  }
+  else if(unit == "in")
+  {
+    temp_conv = temp * in_to_m;
+  }
+  else if(unit == "ft")
+  {
+    temp_conv = temp * ft_to_m;
+  }
+  return temp_conv;
+
+}
+
+bool is_valid(const std::string& unit)
+{
   if (unit == "cm")
   {
-    temp_conv = temp / cm_to_m;
     return true;
   }
   else if (unit == "m")
   {
-    temp_conv = temp;
     return true;
   }
   else if (unit == "in")
   {
-    temp_conv = temp * in_to_m;
     return true;
   }
   else if (unit == "ft")
   {
-    temp_conv = temp * ft_to_m;
     return true;
   }
-  cout << "Invalid unit!\n";
-  cout << "Please enter a valid unit(cm, m, in, ft).\n";
   return false;
 }
 
@@ -41,8 +57,9 @@ int main()
   cout << "To terminate the program enter |\n";
   while (cin >> temp >> unit)
   {
-    if (is_valid(temp_conv, unit, temp) == true)
+    if (is_valid(unit) == true)
     {
+      convert(temp_conv, temp, unit);
       cout << "The entered value is: ";
       cout << temp << ' ' << unit << endl;
       if (temp_conv < smallest || is_first)
@@ -59,6 +76,11 @@ int main()
       data.push_back(temp_conv);
       ++ctr;
       is_first = false;
+    }
+    else
+    {
+      cout << "Invalid unit!\n";
+      cout << "Please enter a valid unit(cm, m, in, ft).\n";
     }
     /*
     if(a == b)
