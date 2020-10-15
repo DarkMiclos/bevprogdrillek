@@ -89,7 +89,7 @@ void Token_stream::putback(Token t)
 
 
 
-Token Token_stream:: get()
+Token Token_stream::get()
 
 {
 
@@ -113,9 +113,9 @@ Token Token_stream:: get()
 
     switch (ch) {
 
-    case ';':    // for "print"
+    case '=':    // for "print"
 
-    case 'q':    // for "quit"
+    case 'x':    // for "quit"
 
     case '(': case ')': case '+': case '-': case '*': case '/':
 
@@ -190,7 +190,7 @@ double primary()
 
         if (t.kind != ')') error("')' expected");
 
-        return d;
+        	return d;
 
     }
 
@@ -234,6 +234,7 @@ double term()
             left *= primary();
 
             t = ts.get();
+	    break;
 
         case '/':
 
@@ -295,7 +296,7 @@ double expression()
 
         case '-':
 
-            left += term();    // evaluate Term and subtract
+            left -= term();    // evaluate Term and subtract
 
             t = ts.get();
 
@@ -325,6 +326,8 @@ try
 
 {
 
+    cout << "Welcome to our simple calculator\n";
+    cout << "Please enter expressions(using '+' '-' '/' '*') using floating -point numbers\n";
     while (cin) {
 
         Token t = ts.get();
@@ -332,9 +335,9 @@ try
         double val = expression();
 
 
-        if (t.kind == 'q') break; // 'q' for quit
+        if (t.kind == 'x') break; // 'q' for quit
 
-        if (t.kind == ';')        // ';' for "print now"
+        if (t.kind == '=')        // ';' for "print now"
 
             cout << "=" << val << '\n';
 
