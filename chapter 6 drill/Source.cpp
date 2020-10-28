@@ -1,10 +1,8 @@
 #include "std_lib_facilities.h"
 
-
-
-//------------------------------------------------------------------------------
-
-
+constexpr char num = '8';
+constexpr char print = '=';
+constexpr char quit = 'x';
 
 class Token {
 
@@ -39,6 +37,7 @@ public:
 	Token get();      // get a Token (get() is defined elsewhere)
 
 	void putback(Token t);    // put a Token back
+	void ignore(char c);
 
 private:
 
@@ -113,11 +112,11 @@ Token Token_stream::get()
 
 	switch (ch) {
 
-	case '=':    // for "print"
+	case print:    // for "print"
 
-	case 'x':    // for "quit"
+	case quit:    // for "quit"
 
-	case '(': case ')': case '+': case '-': case '*': case '/':
+	case '(': case ')': case '+': case '-': case '*': case '/': case '%':
 
 		return Token(ch);        // let each character represent itself
 
@@ -135,7 +134,7 @@ Token Token_stream::get()
 
 		cin >> val;              // read a floating-point number
 
-		return Token('8', val);   // let '8' represent "a number"
+		return Token(num, val);   // let '8' represent "a number"
 
 	}
 
@@ -194,10 +193,13 @@ double primary()
 
 	}
 
-	case '8':            // we use '8' to represent a number
+	case num:            // we use '8' to represent a number
 
 		return t.value;  // return the number's value
-
+	case '-':
+		return -primary();
+	case '+':
+		return primary();
 	default:
 
 		error("primary expected");
@@ -251,7 +253,14 @@ double term()
 			break;
 
 		}
-
+		case '%':
+		{
+			double d = primary();
+			if (d == 0) error("modulo is zero");
+			left = fmod(left, d);
+			t = ts.get();
+			break;
+		}
 		default:
 
 			ts.putback(t);     // put t back into the token stream
@@ -317,8 +326,48 @@ double expression()
 
 
 //------------------------------------------------------------------------------
+void Token_stream::ignore(char c)
+{
+	if (full && c == buffer.kind)
+	{
+		full = false;
+		return;
+	}
+	char ch = 0;
+	while (cin >> ch)
+	{
+		if (ch == c)
+		{
+			return;
+		}
+	}
+}
 
+void clean_up_mess()
+{
+	ts.ignore(print);
+}
 
+void calculate()
+{
+	while (cin)
+	{
+		try
+		{
+			Token t = ts.get();
+			while (t.kind == print) t = ts.get();
+			if (t.kind == quit) return;
+			ts.putback(t);
+			cout << print << expression() << endl;
+
+		}
+		catch (exception& ex)
+		{
+			cerr << ex.what() << endl;
+			clean_up_mess();
+		}
+	}
+}
 
 int main()
 
@@ -327,26 +376,9 @@ try
 {
 
 	cout << "Welcome to our simple calculator\n";
-	cout << "Please enter expressions(using '+' '-' '/' '*') using floating -point numbers\n";
-	double val = 0;
-	while (cin) {
-
-		Token t = ts.get();
-
-
-		if (t.kind == 'x') break; // 'q' for quit
-
-		if (t.kind == '=')        // ';' for "print now"
-
-			cout << "=" << val << '\n';
-
-		else
-		{
-			ts.putback(t);
-			val = expression();
-		}
-	}
-
+	cout << "Please enter expressions(using '+' '-' '/' '*' '%') using floating -point numbers\n";
+	cout << "To print the result use '=' and to exit the program use 'x'\n";
+	calculate();
 	keep_window_open();
 
 }
