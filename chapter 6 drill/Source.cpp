@@ -27,7 +27,6 @@ public:
 //------------------------------------------------------------------------------
 
 
-
 class Token_stream {
 
 public:
@@ -124,7 +123,7 @@ Token Token_stream::get()
 
 	case '0': case '1': case '2': case '3': case '4':
 
-	case '5': case '6': case '7': case '9':
+	case '5': case '6': case '7': case '8': case '9':
 
 	{
 
@@ -308,7 +307,7 @@ double expression()
 			left -= term();    // evaluate Term and subtract
 
 			t = ts.get();
-
+			
 			break;
 
 		default:
@@ -379,7 +378,6 @@ try
 	cout << "Please enter expressions(using '+' '-' '/' '*' '%') using floating -point numbers\n";
 	cout << "To print the result use '=' and to exit the program use 'x'\n";
 	calculate();
-	keep_window_open();
 
 }
 
