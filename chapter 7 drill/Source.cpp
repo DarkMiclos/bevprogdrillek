@@ -26,8 +26,13 @@ const char quit = 'Q';
 const char print = ';';
 const char number = '8';
 const char name = 'a';
+const char square_root = '#';
+const char power_raise = '@';
+const char comma = ',';
 const string declkey = "left";
 const string declquit = "quit";
+const string declsqrt = "sqrt";
+const string declpow = "pow";
 
 Token Token_stream::get()
 {
@@ -37,6 +42,9 @@ Token Token_stream::get()
 	switch (ch) {
 	case let:
 	case quit:
+	case square_root:
+	case power_raise:
+	case comma:
 	case '(':
 	case ')':
 	case '+':
@@ -70,6 +78,8 @@ Token Token_stream::get()
 			while (cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
 			cin.unget();
 			if (s == declkey) return Token{ let };
+			else if (s == declsqrt) return Token(square_root);
+			else if (s == declpow) return Token(power_raise);
 			if (s == declquit) return Token(name);
 			return Token{ name, s };
 		}
@@ -126,6 +136,32 @@ Token_stream ts;
 
 double expression();
 
+double calc_sqrt()
+{
+	char ch;
+	if (cin.get(ch) && ch != '(') error("'(' expected");
+	cin.unget();
+	double d = expression();
+	if (d < 0) error("There is no real square_root for this expression.");
+	return sqrt(d);
+}
+
+double primary();
+
+double calc_pow()
+{
+		char ch;
+		if (cin.get(ch) && ch != '(') error("'(' expected");
+		double d = primary();
+		Token t = ts.get();
+		if (t.kind != comma) error("',' expected no power raise exponent");
+		double d2 = primary();
+		Token t2 = ts.get();
+		if (t2.kind != ')') error("')' expected");
+		return pow(d, d2);
+
+}
+
 double primary()
 {
 	Token t = ts.get();
@@ -133,7 +169,7 @@ double primary()
 	case '(':
 	{	double d = expression();
 	t = ts.get();
-	if (t.kind != ')') error("'(' expected");
+	if (t.kind != ')') error("')' expected");
 	return d;
 	}
 	case '-':
@@ -142,6 +178,10 @@ double primary()
 		return t.value;
 	case name:
 		return get_value(t.name);
+	case square_root:
+		return calc_sqrt();
+	case power_raise:
+		return calc_pow();
 	default:
 		error("primary expected");
 	}
@@ -254,7 +294,8 @@ int main()
 
 try {
 	define_name("pi", 3.1415926535);
-	define_name("e",2.7182818284); 
+	define_name("e",2.7182818284);
+	define_name("k", 1000);
 	calculate();
 	return 0;
 }
