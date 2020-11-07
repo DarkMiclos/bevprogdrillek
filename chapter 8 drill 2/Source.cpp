@@ -30,16 +30,16 @@ namespace Z
 int main()
 {
   X::var = 7;
-  X::print();
+  X::print(); // print X-s var
   using namespace Y;
   var = 9;
-  print();
+  print(); // print Y-s var
   {
     using Z::var;
     using Z::print;
     var = 11;
-    print();
+    print(); // print Z-s var
   }
   print();
-  X::print();
+  X::print(); // print X-s var
 }
