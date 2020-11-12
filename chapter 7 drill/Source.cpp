@@ -85,7 +85,7 @@ Token Token_stream::get()
 		}
 		error("Bad token");
 	}
-	return Token();
+	return -1;
 }
 
 void Token_stream::ignore(char c)
@@ -154,10 +154,10 @@ double calc_pow()
 {
 		char ch;
 		if (cin.get(ch) && ch != '(') error("'(' expected");
-		double d = primary();
+		double d = expression();
 		Token t = ts.get();
 		if (t.kind != comma) error("',' expected no power raise exponent");
-		double d2 = primary();
+		double d2 = expression();
 		Token t2 = ts.get();
 		if (t2.kind != ')') error("')' expected");
 		return pow(d, d2);
