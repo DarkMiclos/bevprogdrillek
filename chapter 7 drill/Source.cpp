@@ -85,6 +85,7 @@ Token Token_stream::get()
 		}
 		error("Bad token");
 	}
+	return Token();
 }
 
 void Token_stream::ignore(char c)
@@ -113,6 +114,7 @@ double get_value(string s)
 	for (int i = 0; i < names.size(); ++i)
 		if (names[i].name == s) return names[i].value;
 	error("get: undefined name ", s);
+	return 0.0;
 }
 
 void set_value(string s, double d)
@@ -185,6 +187,7 @@ double primary()
 	default:
 		error("primary expected");
 	}
+	return 0.0;
 }
 
 double term()
