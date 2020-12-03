@@ -29,13 +29,13 @@ int main()
   delete[] p2;
 
   p1 = new int[10]{ 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 };
-  p2 = new int[10];
-  p2 = p1;
-  cout << "p2 values:\n";
-  print_array(cout, p2, 10);
+  p3 = new int[10];
+  delete[] p3;
+  p3 = p1;
+  cout << "p3 values:\n";
+  print_array(cout, p3, 10);
 
-  delete[] p1;
-
+  delete[] p3;
   vector<int> v1 = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 };
   vector<int> v2(v1.size());
 

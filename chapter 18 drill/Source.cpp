@@ -28,6 +28,7 @@ int fact(int n)
     cerr << "Some error xd." << endl;
     return 0;
   }
+  return n;
 }
 
 void f(int a[], int n)
